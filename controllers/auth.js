@@ -3,13 +3,14 @@ const jwt = require("jsonwebtoken");
 const { json } = require("body-parser");
 
 exports.signup = (req, res) => {
-  const { name, email, password, role } = req.body;
-  const profile = req.files.profileImage;
-  console.log(req.body);
+  const { name, email, password, profileImage, role } = req.body;
+  //const profile = req.files.profileImage;
+
   //console.log("file", profile);
-  const picData = profile.data;
-  const encodeedPic = picData.toString("base64");
-  const profileImage = Buffer.from(encodeedPic, "base64");
+
+  //const encodeedPic = picData.toString("base64");
+  //const profileImage = Buffer.from(encodeedPic, "base64");
+  //console.log(profileImage);
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       return res.status(400).json({
@@ -18,8 +19,6 @@ exports.signup = (req, res) => {
     }
   });
   let rol = JSON.parse(role);
-  console.log("role", role);
-  console.log("xx", rol);
 
   let newUser = new User({
     name,
@@ -42,7 +41,7 @@ exports.signup = (req, res) => {
 
 exports.signin = (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
+
   // check if user exist
   User.findOne({ email }).exec((err, user) => {
     console.log(user);
@@ -74,6 +73,7 @@ exports.signin = (req, res) => {
 exports.userListData = async (req, res) => {
   try {
     const test = await User.find({});
+
     res.json(test);
   } catch (error) {
     res.json({ message: error });
