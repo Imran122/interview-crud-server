@@ -31,6 +31,7 @@ const userScheama = new mongoose.Schema(
     },
     profileImage: {
       type: String,
+      data: Buffer,
     },
     salt: String,
   },

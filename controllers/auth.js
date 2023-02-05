@@ -1,9 +1,15 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const { json } = require("body-parser");
 
 exports.signup = (req, res) => {
   const { name, email, password, role } = req.body;
-
+  const profile = req.files.profileImage;
+  console.log(req.body);
+  //console.log("file", profile);
+  const picData = profile.data;
+  const encodeedPic = picData.toString("base64");
+  const profileImage = Buffer.from(encodeedPic, "base64");
   User.findOne({ email }).exec((err, user) => {
     if (user) {
       return res.status(400).json({
@@ -11,8 +17,17 @@ exports.signup = (req, res) => {
       });
     }
   });
+  let rol = JSON.parse(role);
+  console.log("role", role);
+  console.log("xx", rol);
 
-  let newUser = new User({ name, email, role, password });
+  let newUser = new User({
+    name,
+    email,
+    profileImage,
+    role: rol.role,
+    password,
+  });
 
   newUser.save((err, success) => {
     if (err) {
@@ -53,4 +68,14 @@ exports.signin = (req, res) => {
       user: { _id, name, email, role },
     });
   });
+};
+
+//show user list
+exports.userListData = async (req, res) => {
+  try {
+    const test = await User.find({});
+    res.json(test);
+  } catch (error) {
+    res.json({ message: error });
+  }
 };

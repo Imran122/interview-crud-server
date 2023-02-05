@@ -2,9 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-
+const fileUpload = require("express-fileupload");
 require("dotenv").config();
-
+var busboy = require("connect-busboy");
 const app = express();
 
 // connect to db
@@ -18,13 +18,10 @@ mongoose
 
 // app middlewares
 //app.use(bodyParser.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(busboy());
+app.use(fileUpload());
 app.use(bodyParser.json({ limit: "50mb" }));
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+//app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(cors()); // allows all origins
 
 // routes attached with server
