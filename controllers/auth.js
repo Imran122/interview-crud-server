@@ -30,7 +30,6 @@ exports.signup = (req, res) => {
 
   newUser.save((err, success) => {
     if (err) {
-      console.log("SIGNUP ERROR", err);
       return res.status(400).json({ error: err });
     }
     res.json({
@@ -44,7 +43,6 @@ exports.signin = (req, res) => {
 
   // check if user exist
   User.findOne({ email }).exec((err, user) => {
-    console.log(user);
     if (err || !user) {
       return res.status(400).json({
         error: "User with that email does not exist. Please signup",
