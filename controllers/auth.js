@@ -77,7 +77,21 @@ exports.userListData = async (req, res) => {
     res.json({ message: error });
   }
 };
+//read user
+exports.read = async (req, res) => {
+  const _id = req.params.id;
+  console.log("gfg", _id);
 
+  User.findById(_id).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+
+    res.json(user);
+  });
+};
 //delete user
 exports.userDelete = async (req, res) => {
   try {
@@ -89,4 +103,20 @@ exports.userDelete = async (req, res) => {
   } catch (error) {
     res.json({ message: error });
   }
+};
+//update list
+exports.userUpdateData = async (req, res) => {
+  const { name, email, id } = req.body;
+
+  await User.findByIdAndUpdate(id, {
+    $set: {
+      name: name,
+      email: email,
+    },
+  });
+
+  return res.json({
+    name: name,
+    email: email,
+  });
 };
