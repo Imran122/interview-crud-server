@@ -77,3 +77,16 @@ exports.userListData = async (req, res) => {
     res.json({ message: error });
   }
 };
+
+//delete user
+exports.userDelete = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    await User.deleteOne({ _id: id });
+
+    res.json({ message: "successfully deleted" });
+  } catch (error) {
+    res.json({ message: error });
+  }
+};
